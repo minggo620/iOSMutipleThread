@@ -1,2 +1,3 @@
-# iOSMutipleThread
-iOS 多线程编程
+# 多样的iOS多线程（NSThread、NSOperation、GCD）编程
+
+
