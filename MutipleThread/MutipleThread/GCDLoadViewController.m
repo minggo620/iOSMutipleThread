@@ -55,7 +55,7 @@
     size_t count = 10;
     dispatch_apply(count, queue, ^(size_t i) {
         NSLog(@"循环执行第%li次",i);
-        [self loadImageSource:imgUrl1];
+        //[self loadImageSource:imgUrl1];
     });
 }
 
