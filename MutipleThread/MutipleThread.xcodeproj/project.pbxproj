@@ -15,6 +15,10 @@
 		46254BCD1C55FCF9004D75F2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 46254BCB1C55FCF9004D75F2 /* LaunchScreen.storyboard */; };
 		46254BD81C55FCF9004D75F2 /* MutipleThreadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 46254BD71C55FCF9004D75F2 /* MutipleThreadTests.m */; };
 		46254BE31C55FCF9004D75F2 /* MutipleThreadUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 46254BE21C55FCF9004D75F2 /* MutipleThreadUITests.m */; };
+		465D56EB1C571D82005FD699 /* NSThreadLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 465D56EA1C571D82005FD699 /* NSThreadLoadViewController.m */; };
+		465D56EE1C571D99005FD699 /* NSOperationLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 465D56ED1C571D99005FD699 /* NSOperationLoadViewController.m */; };
+		465D56F11C571DAA005FD699 /* GCDLoadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 465D56F01C571DAA005FD699 /* GCDLoadViewController.m */; };
+		465D56F41C576835005FD699 /* LoadImageOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 465D56F31C576835005FD699 /* LoadImageOperation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +55,14 @@
 		46254BDE1C55FCF9004D75F2 /* MutipleThreadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MutipleThreadUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		46254BE21C55FCF9004D75F2 /* MutipleThreadUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MutipleThreadUITests.m; sourceTree = "<group>"; };
 		46254BE41C55FCF9004D75F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		465D56E91C571D82005FD699 /* NSThreadLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSThreadLoadViewController.h; sourceTree = "<group>"; };
+		465D56EA1C571D82005FD699 /* NSThreadLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSThreadLoadViewController.m; sourceTree = "<group>"; };
+		465D56EC1C571D99005FD699 /* NSOperationLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSOperationLoadViewController.h; sourceTree = "<group>"; };
+		465D56ED1C571D99005FD699 /* NSOperationLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSOperationLoadViewController.m; sourceTree = "<group>"; };
+		465D56EF1C571DAA005FD699 /* GCDLoadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDLoadViewController.h; sourceTree = "<group>"; };
+		465D56F01C571DAA005FD699 /* GCDLoadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDLoadViewController.m; sourceTree = "<group>"; };
+		465D56F21C576835005FD699 /* LoadImageOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadImageOperation.h; sourceTree = "<group>"; };
+		465D56F31C576835005FD699 /* LoadImageOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadImageOperation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +122,14 @@
 				46254BCB1C55FCF9004D75F2 /* LaunchScreen.storyboard */,
 				46254BCE1C55FCF9004D75F2 /* Info.plist */,
 				46254BBD1C55FCF9004D75F2 /* Supporting Files */,
+				465D56E91C571D82005FD699 /* NSThreadLoadViewController.h */,
+				465D56EA1C571D82005FD699 /* NSThreadLoadViewController.m */,
+				465D56EC1C571D99005FD699 /* NSOperationLoadViewController.h */,
+				465D56ED1C571D99005FD699 /* NSOperationLoadViewController.m */,
+				465D56EF1C571DAA005FD699 /* GCDLoadViewController.h */,
+				465D56F01C571DAA005FD699 /* GCDLoadViewController.m */,
+				465D56F21C576835005FD699 /* LoadImageOperation.h */,
+				465D56F31C576835005FD699 /* LoadImageOperation.m */,
 			);
 			path = MutipleThread;
 			sourceTree = "<group>";
@@ -270,9 +290,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				465D56F41C576835005FD699 /* LoadImageOperation.m in Sources */,
 				46254BC51C55FCF9004D75F2 /* ViewController.m in Sources */,
 				46254BC21C55FCF9004D75F2 /* AppDelegate.m in Sources */,
+				465D56EE1C571D99005FD699 /* NSOperationLoadViewController.m in Sources */,
+				465D56F11C571DAA005FD699 /* GCDLoadViewController.m in Sources */,
 				46254BBF1C55FCF9004D75F2 /* main.m in Sources */,
+				465D56EB1C571D82005FD699 /* NSThreadLoadViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,7 +387,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -401,7 +425,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -414,6 +438,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MutipleThread/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.minggo.mutiple.thread.MutipleThread;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -425,6 +450,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MutipleThread/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.minggo.mutiple.thread.MutipleThread;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -498,6 +524,7 @@
 				46254BE91C55FCF9004D75F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		46254BEA1C55FCF9004D75F2 /* Build configuration list for PBXNativeTarget "MutipleThreadTests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +533,7 @@
 				46254BEC1C55FCF9004D75F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		46254BED1C55FCF9004D75F2 /* Build configuration list for PBXNativeTarget "MutipleThreadUITests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +542,7 @@
 				46254BEF1C55FCF9004D75F2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

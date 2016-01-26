@@ -20,13 +20,14 @@
 6. 并发：  线程执行可以同时一起进行执行。
 7. 串行：  线程执行只能依次逐一先后有序的执行。    
 
-***注意:***  
-+一个进程可有多个线程。  
-+一个进程可有多个队列。  
-+队列可分并发队列和串行队列。  
+***注意:***    
+
+* 一个进程可有多个线程。  
+* 一个进程可有多个队列。  
+* 队列可分并发队列和串行队列。  
 
 ###二.iOS多线程对比  
-####1. NSThread  
+#####1. NSThread  
 每个NSThread对象对应一个线程，真正最原始的线程。  
 1）优点：NSThread 轻量级最低，相对简单。  
 2）缺点：手动管理所有的线程活动，如生命周期、线程同步、睡眠等。
@@ -54,9 +55,306 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
 
 ###四.使用方法  
 第三标题内容实现先留下一个悬念。具体实现还是先熟知一下各自的API先。
-#####1. NSThread  
+#####1. NSThread    
+**1）三种实现开启线程方式：**  
+①.动态实例化  
+	  
+	NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(loadImageSource:) object:imgUrl];
+    thread.threadPriority = 1;// 设置线程的优先级(0.0 - 1.0，1.0最高级)
+    [thread start];  
 
+②.静态实例化  
+	  
+	[NSThread detachNewThreadSelector:@selector(loadImageSource:) toTarget:self withObject:imgUrl];   
+ 
+③.隐式实例化    
 
+	[self performSelectorInBackground:@selector(loadImageSource:) withObject:imgUrl];  
 
+有了以上的知识点，可以试探了一下编写场景选择中的“图片加载”的基本功能了。  
 
+**2）使用这三种方式编写代码**
+	  
+	//动态创建线程
+	-(void)dynamicCreateThread{
+   
+    	NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(loadImageSource:) object:imgUrl];
+    	thread.threadPriority = 1;// 设置线程的优先级(0.0 - 1.0，1.0最高级)
+    	[thread start];
+	}
 
+	//静态创建线程
+	-(void)staticCreateThread{
+    
+    	[NSThread detachNewThreadSelector:@selector(loadImageSource:) toTarget:self withObject:imgUrl];
+    
+	}
+
+	//隐式创建线程
+	-(void)implicitCreateThread{
+    
+    	[self performSelectorInBackground:@selector(loadImageSource:) withObject:imgUrl];
+	}
+
+	-(void)loadImageSource:(NSString *)url{
+    	NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+    	UIImage *image = [UIImage imageWithData:imgData];
+    	if (imgData!=nil) {
+        	[self performSelectorOnMainThread:@selector(refreshImageView:) withObject:image waitUntilDone:YES];
+    	}else{
+        	NSLog(@"there no image data");
+    	}
+    
+	}
+
+	-(void)refreshImageView:(UIImage *)image{
+    	[self.imageView setImage:image];
+	}
+
+**3）看先效果图**  
+
+**4）NSThread的拓展认识**  
+①获取当前线程    
+
+	NSThread *current = [NSThread currentThread];   
+
+②获取主线程  
+	
+	NSThread *main = [NSThread mainThread];   
+  
+③暂停当前线程  
+	
+	[NSThread sleepForTimeInterval:2];  
+
+④线程之间通信  
+	
+	//在指定线程上执行操作
+	[self performSelector:@selector(run) onThread:thread withObject:nil waitUntilDone:YES]; 
+	//在主线程上执行操作
+	[self performSelectorOnMainThread:@selector(run) withObject:nil waitUntilDone:YES]; 
+	//在当前线程执行操作
+	[self performSelector:@selector(run) withObject:nil]; 
+	
+显然动态创建线程多了几行代码，其实就是那几行代码，如果重复编写数遍那是一件多么不爽的事情。首次看来静态方法创作线程和隐式创建线程显得比较方便，简洁。从知识结构来说，讲到这里应该讲述一下**线程锁**，鉴于并不常用和文章过长就不在此详细讲述，有兴趣可以自行查阅。
+#####2. NSOperation    
+主要的实现方式：结合NSOperation和NSOperationQueue实现多线程编程。
+    
+* 实例化NSOperation的子类，绑定执行的操作。
+* 创建NSOperationQueue队列，将NSOperation实例添加进来。
+* 系统会自动将NSOperationQueue队列中检测取出和执行NSOperation的操作。    
+
+**1）使用NSOperation的子类实现创作线程。**  
+①.NSInvocationOperation创建线程。  
+	
+	NSInvocationOperation *invocationOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(loadImageSource:) object:imgUrl];
+    //[invocationOperation start];//直接会在当前线程主线程执行
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    [queue addOperation:invocationOperation];  
+
+②.NSBlockOperation创建线程    
+
+	NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [self loadImageSource:imgUrl];
+    }];
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    [queue addOperation:blockOperation];  
+
+③.自定义NSOperation子类实现main方法  
+
+实现main方法  
+
+	- (void)main {
+    
+    	@autoreleasepool {//主要处理异步线程，自己做释放
+        
+        	// Do somthing
+    	}
+	}  
+创建线程实例并添加到队列中	
+	
+	LoadImageOperation *imageOperation = [LoadImageOperation new];
+    imageOperation.loadDelegate = self;
+    imageOperation.imgUrl = imgUrl;
+    
+    NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    [queue addOperation:imageOperation];
+
+**2）使用这三种方式编写代码**
+
+创建各个实例并添加到队列表当中  
+
+	//使用子类NSInvocationOperation
+	-(void)useInvocationOperation{
+    	NSInvocationOperation *invocationOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(loadImageSource:) object:imgUrl];
+    	//[invocationOperation start];//直接会在当前线程主线程执行
+    	NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    	[queue addOperation:invocationOperation];
+    
+	}
+
+	//使用子类NSBlockOperation
+	-(void)useBlockOperation{
+    
+    	NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
+        	[self loadImageSource:imgUrl];
+    	}];
+    
+    	NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    	[queue addOperation:blockOperation];
+    
+	}
+	//使用继承NSOperation
+	-(void)useSubclassOperation{
+    
+    	LoadImageOperation *imageOperation = [LoadImageOperation new];
+    	imageOperation.loadDelegate = self;
+    	imageOperation.imgUrl = imgUrl;
+    
+    	NSOperationQueue *queue = [[NSOperationQueue alloc]init];
+    	[queue addOperation:imageOperation];
+	}
+
+	-(void)loadImageSource:(NSString *)url{
+    
+    	NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+    	UIImage *image = [UIImage imageWithData:imgData];
+    	if (imgData!=nil) {
+        	[self performSelectorOnMainThread:@selector(refreshImageView1:) withObject:image waitUntilDone:YES];
+    	}else{
+        	NSLog(@"there no image data");
+    	}
+    
+	}
+
+	-(void)refreshImageView1:(UIImage *)image{
+    	[self.loadingLb setHidden:YES];
+    	[self.imageView setImage:image];
+	}
+
+	-(void) loadImageFinish:(UIImage *)image{
+    	[self.loadingLb setHidden:YES];
+    	[self.imageView setImage:image];
+	}
+
+附自定义NSOperation子类main主要代码实现  
+
+	- (void)main {
+    
+        if (self.isCancelled) return;
+        
+        NSURL *url = [NSURL URLWithString:self.imgUrl];
+        NSData *imageData = [NSData dataWithContentsOfURL:url];
+                
+        if (self.loadDelegate!=nil&&[self.loadDelegate respondsToSelector:@selector(loadImageFinish:)]) {
+            
+            [(NSObject *)self.loadDelegate performSelectorOnMainThread:@selector(loadImageFinish:) withObject:image waitUntilDone:NO];
+        }
+    }
+
+**3）看先效果图**    
+
+#####3. GCD多线程
+GCD是Apple开发，据说高性能的多线程解决方案。既然这样，就细说一下这个解决方案。  
+进过Nsthread和NSOperation的讲述和上边的基础概念，可以开始组合用起来吧。**并发队列**、**串行队列**都用起来。  
+**1）分发队列种类(dispatch queue)**    
+①.UI主线程队列 main queue
+	
+	dispatch_get_main_queue()  
+	
+②.并行队列global dispatch queue  
+	
+	dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)  
+	
+这里的两个参数得说明一下：第一个参数用于指定优先级，分别使用DISPATCH_QUEUE_PRIORITY_HIGH和DISPATCH_QUEUE_PRIORITY_LOW两个常量来获取高和低优先级的两个queue；第二个参数目前未使用到，默认0即可
+
+③.串行队列serial queues  
+	
+	dispatch_queue_create("minggo.app.com", NULL);  
+
+**2）6中多线程实现**
+①后台执行线程创建
+	
+	dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [self loadImageSource:imgUrl1];
+    });
+    
+②UI线程执行(只是为了测试，长时间加载内容不放在主线程)
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
+        [self loadImageSource:imgUrl1];
+    });
+③一次性执行(常用来写单例)    
+
+	static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self loadImageSource:imgUrl1];
+    });
+④并发地执行循环迭代  
+	
+	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    size_t count = 10;
+    dispatch_apply(count, queue, ^(size_t i) {
+        NSLog(@"循环执行第%li次",i);
+        [self loadImageSource:imgUrl1];
+    });  
+⑤延迟执行  
+	
+	double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        [self loadImageSource:imgUrl1];
+    });  
+⑥自定义dispatch_queue_t
+	
+	dispatch_queue_t urls_queue = dispatch_queue_create("minggo.app.com", NULL);
+    dispatch_async(urls_queue, ^{
+        [self loadImageSource:imgUrl1];
+    });
+
+**3）对比多任务执行**
+①串行先后执行，加载两张图片为例    
+
+	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        UIImage *image1 = [self loadImage:imgUrl1];
+        UIImage *image2 = [self loadImage:imgUrl2];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.imageview1.image = image1;
+            self.imageView2.image = image2;
+        });
+    });  
+
+②并行队列执行，也是以加载两张图片为例  
+
+	dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    
+    
+    dispatch_async(queue, ^{
+        
+        dispatch_group_t group = dispatch_group_create();
+        
+        __block UIImage *image1 = nil;
+        __block UIImage *image2 = nil;
+        
+        
+        dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            image1 = [self loadImage:imgUrl1];
+        });
+        
+        dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            image2 = [self loadImage:imgUrl2];
+        });
+        
+        
+        dispatch_group_notify(group, dispatch_get_main_queue(), ^{
+            self.imageview1.image = image1;
+            self.imageView2.image = image2;
+            
+        });
+    });
+    
+**4）编码实现**  
+以上一点内容99%代码一样，就不提供一个稍微整体的代码了。看看下边的效果图吧。
+**5）效果图如下**  
