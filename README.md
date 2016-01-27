@@ -54,9 +54,9 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
 场景二，app本地创作列表中有3本小说为发表，同时发表创作列表中的3本小说，自然考虑**并行队列执行**发表。  
 
 ###四.使用方法  
-第三标题内容实现先留下一个悬念。具体实现还是先熟知一下各自的API先。
+第三标题场景选择内容实现先留下一个悬念。具体实现还是先熟知一下各自的API先。
 #####1. NSThread    
-**1）三种实现开启线程方式：**  
+**1.1）三种实现开启线程方式：**  
 ①.动态实例化  
 	  
 	NSThread *thread = [[NSThread alloc] initWithTarget:self selector:@selector(loadImageSource:) object:imgUrl];
@@ -73,7 +73,7 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
 
 有了以上的知识点，可以试探了一下编写场景选择中的“图片加载”的基本功能了。  
 
-**2）使用这三种方式编写代码**
+**1.2）使用这三种方式编写代码**
 	  
 	//动态创建线程
 	-(void)dynamicCreateThread{
@@ -111,9 +111,9 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
     	[self.imageView setImage:image];
 	}
 
-**3）看先效果图**  
+**1.3）看先效果图**  
 
-**4）NSThread的拓展认识**  
+**1.4）NSThread的拓展认识**  
 ①获取当前线程    
 
 	NSThread *current = [NSThread currentThread];   
@@ -143,7 +143,7 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
 * 创建NSOperationQueue队列，将NSOperation实例添加进来。
 * 系统会自动将NSOperationQueue队列中检测取出和执行NSOperation的操作。    
 
-**1）使用NSOperation的子类实现创作线程。**  
+**2.1）使用NSOperation的子类实现创作线程。**  
 ①.NSInvocationOperation创建线程。  
 	
 	NSInvocationOperation *invocationOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(loadImageSource:) object:imgUrl];
@@ -162,16 +162,14 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
 
 ③.自定义NSOperation子类实现main方法  
 
-实现main方法  
+* 实现main方法  
 
 	- (void)main {
-    
-    	@autoreleasepool {//主要处理异步线程，自己做释放
-        
-        	// Do somthing
-    	}
+    	
+    	// Do somthing
+    	
 	}  
-创建线程实例并添加到队列中	
+* 创建线程实例并添加到队列中	
 	
 	LoadImageOperation *imageOperation = [LoadImageOperation new];
     imageOperation.loadDelegate = self;
@@ -180,7 +178,7 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
     NSOperationQueue *queue = [[NSOperationQueue alloc]init];
     [queue addOperation:imageOperation];
 
-**2）使用这三种方式编写代码**
+**2.2）使用这三种方式编写代码**
 
 创建各个实例并添加到队列表当中  
 
@@ -252,12 +250,12 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
         }
     }
 
-**3）看先效果图**    
+**2.3）看先效果图**    
 
 #####3. GCD多线程
 GCD是Apple开发，据说高性能的多线程解决方案。既然这样，就细说一下这个解决方案。  
 进过Nsthread和NSOperation的讲述和上边的基础概念，可以开始组合用起来吧。**并发队列**、**串行队列**都用起来。  
-**1）分发队列种类(dispatch queue)**    
+**3.1）分发队列种类(dispatch queue)**    
 ①.UI主线程队列 main queue
 	
 	dispatch_get_main_queue()  
@@ -272,7 +270,7 @@ GCD是Apple开发，据说高性能的多线程解决方案。既然这样，就
 	
 	dispatch_queue_create("minggo.app.com", NULL);  
 
-**2）6中多线程实现**
+**3.2）6中多线程实现**
 ①后台执行线程创建
 	
 	dispatch_async(dispatch_get_global_queue(0, 0), ^{
@@ -312,8 +310,10 @@ GCD是Apple开发，据说高性能的多线程解决方案。既然这样，就
         [self loadImageSource:imgUrl1];
     });
 
-**3）对比多任务执行**
-①串行先后执行，加载两张图片为例    
+**3.3）对比多任务执行**
+异步加载图片是大部分app都要问题，那么加载图片是按循序加载完之后才刷新UI呢？还是不安顺序加载UI呢？显然大部分的希望各自加载各自的图片，各自刷新。以下就是模拟这两种场景。
+
+①先后执行，加载两张图片为例    
 
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -354,7 +354,7 @@ GCD是Apple开发，据说高性能的多线程解决方案。既然这样，就
             
         });
     });
-    
-**4）编码实现**  
+①中等到两张图片加载完成后一起刷新，②就是典型的异步并行的例子，不需要理会各自图片加载的先后问题，完成加载图片刷新UI即可。从加载图片中来说，第①种不太合适使用，但是对于在上边场景选择的时候的创作工具来说有很大的好处，首先得异步进行，然后异步中有得按顺序执行几个任务，比如上传章节内容。因此，我们可以灵活考虑使用这两多线程任务执行方式，实现各种场景。    
+**3.4）编码实现**  
 以上一点内容99%代码一样，就不提供一个稍微整体的代码了。看看下边的效果图吧。  
-**5）效果图如下**  
+**3.5）效果图如下**  

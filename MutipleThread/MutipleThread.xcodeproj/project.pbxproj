@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4608E21F1C585FE3009B94F8 /* UIView+Toast.m in Sources */ = {isa = PBXBuildFile; fileRef = 4608E21E1C585FE3009B94F8 /* UIView+Toast.m */; };
 		46254BBF1C55FCF9004D75F2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 46254BBE1C55FCF9004D75F2 /* main.m */; };
 		46254BC21C55FCF9004D75F2 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 46254BC11C55FCF9004D75F2 /* AppDelegate.m */; };
 		46254BC51C55FCF9004D75F2 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46254BC41C55FCF9004D75F2 /* ViewController.m */; };
@@ -39,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4608E21D1C585FE3009B94F8 /* UIView+Toast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Toast.h"; sourceTree = "<group>"; };
+		4608E21E1C585FE3009B94F8 /* UIView+Toast.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Toast.m"; sourceTree = "<group>"; };
 		46254BBA1C55FCF9004D75F2 /* MutipleThread.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MutipleThread.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		46254BBE1C55FCF9004D75F2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		46254BC01C55FCF9004D75F2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -90,10 +93,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4608E2191C585E2A009B94F8 /* NSThread Load */ = {
+			isa = PBXGroup;
+			children = (
+				465D56E91C571D82005FD699 /* NSThreadLoadViewController.h */,
+				465D56EA1C571D82005FD699 /* NSThreadLoadViewController.m */,
+			);
+			name = "NSThread Load";
+			sourceTree = "<group>";
+		};
+		4608E21A1C585E55009B94F8 /* NSOperation Load */ = {
+			isa = PBXGroup;
+			children = (
+				465D56EC1C571D99005FD699 /* NSOperationLoadViewController.h */,
+				465D56ED1C571D99005FD699 /* NSOperationLoadViewController.m */,
+				465D56F21C576835005FD699 /* LoadImageOperation.h */,
+				465D56F31C576835005FD699 /* LoadImageOperation.m */,
+			);
+			name = "NSOperation Load";
+			sourceTree = "<group>";
+		};
+		4608E21B1C585EA0009B94F8 /* GCD Load */ = {
+			isa = PBXGroup;
+			children = (
+				465D56EF1C571DAA005FD699 /* GCDLoadViewController.h */,
+				465D56F01C571DAA005FD699 /* GCDLoadViewController.m */,
+			);
+			name = "GCD Load";
+			sourceTree = "<group>";
+		};
+		4608E21C1C585FE3009B94F8 /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				4608E21D1C585FE3009B94F8 /* UIView+Toast.h */,
+				4608E21E1C585FE3009B94F8 /* UIView+Toast.m */,
+			);
+			path = Toast;
+			sourceTree = "<group>";
+		};
 		46254BB11C55FCF9004D75F2 = {
 			isa = PBXGroup;
 			children = (
 				46254BBC1C55FCF9004D75F2 /* MutipleThread */,
+				4608E21C1C585FE3009B94F8 /* Toast */,
 				46254BD61C55FCF9004D75F2 /* MutipleThreadTests */,
 				46254BE11C55FCF9004D75F2 /* MutipleThreadUITests */,
 				46254BBB1C55FCF9004D75F2 /* Products */,
@@ -113,6 +155,9 @@
 		46254BBC1C55FCF9004D75F2 /* MutipleThread */ = {
 			isa = PBXGroup;
 			children = (
+				4608E21B1C585EA0009B94F8 /* GCD Load */,
+				4608E21A1C585E55009B94F8 /* NSOperation Load */,
+				4608E2191C585E2A009B94F8 /* NSThread Load */,
 				46254BC01C55FCF9004D75F2 /* AppDelegate.h */,
 				46254BC11C55FCF9004D75F2 /* AppDelegate.m */,
 				46254BC31C55FCF9004D75F2 /* ViewController.h */,
@@ -122,14 +167,6 @@
 				46254BCB1C55FCF9004D75F2 /* LaunchScreen.storyboard */,
 				46254BCE1C55FCF9004D75F2 /* Info.plist */,
 				46254BBD1C55FCF9004D75F2 /* Supporting Files */,
-				465D56E91C571D82005FD699 /* NSThreadLoadViewController.h */,
-				465D56EA1C571D82005FD699 /* NSThreadLoadViewController.m */,
-				465D56EC1C571D99005FD699 /* NSOperationLoadViewController.h */,
-				465D56ED1C571D99005FD699 /* NSOperationLoadViewController.m */,
-				465D56EF1C571DAA005FD699 /* GCDLoadViewController.h */,
-				465D56F01C571DAA005FD699 /* GCDLoadViewController.m */,
-				465D56F21C576835005FD699 /* LoadImageOperation.h */,
-				465D56F31C576835005FD699 /* LoadImageOperation.m */,
 			);
 			path = MutipleThread;
 			sourceTree = "<group>";
@@ -290,6 +327,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4608E21F1C585FE3009B94F8 /* UIView+Toast.m in Sources */,
 				465D56F41C576835005FD699 /* LoadImageOperation.m in Sources */,
 				46254BC51C55FCF9004D75F2 /* ViewController.m in Sources */,
 				46254BC21C55FCF9004D75F2 /* AppDelegate.m in Sources */,

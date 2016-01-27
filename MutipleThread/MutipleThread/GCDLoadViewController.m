@@ -7,6 +7,7 @@
 //
 
 #import "GCDLoadViewController.h"
+#import "UIView+Toast.h"
 
 @interface GCDLoadViewController()
 @property (weak, nonatomic) IBOutlet UIImageView *imageview1;
@@ -34,7 +35,7 @@
         [self loadImageSource:imgUrl1];
     });
 }
-//UI线程执行(只是为了测试)
+//UI线程执行(只是为了测试,长时间的加载不能放在主线程)
 -(void)mainQueue{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self loadImageSource:imgUrl1];
@@ -166,12 +167,15 @@
             [self globalQueue];
             break;
         case 2:
+            [self.view makeToast:@"Mybe app stop for main thread"];
             [self mainQueue];
             break;
         case 3:
+            [self.view makeToast:@"Mybe app stop for main thread"];
             [self dispatchOnce];
             break;
         case 4:
+            [self.view makeToast:@"Look at your Xcode"];
             [self dispatchApply];
             break;
         case 5:
@@ -184,7 +188,7 @@
             [self dispatchAfter];
             break;
         case 8:
-            [self dispatchAfter];
+            [self defineDispatch];
             break;
             
         default:
