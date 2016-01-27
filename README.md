@@ -1,4 +1,4 @@
-# iOS多线程（NSThread、NSOperation、GCD）编程
+# 谈iOS多线程（NSThread、NSOperation、GCD）编程
 [![Support](https://img.shields.io/badge/support-iOS%207%2B%20-blue.svg?style=flat)](https://www.apple.com/nl/ios/)&nbsp;
 [![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
 [![GitHub release](https://img.shields.io/github/release/qubyte/rubidium.svg)]()
@@ -163,13 +163,12 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
 
 ③.自定义NSOperation子类实现main方法  
 
-* 实现main方法  
-
-	- (void)main {
-    	
+实现main方法  
+	
+	-(void)main {	
     	// Do somthing
-    	
-	}  
+	} 
+	 
 * 创建线程实例并添加到队列中	
 	
 	LoadImageOperation *imageOperation = [LoadImageOperation new];
