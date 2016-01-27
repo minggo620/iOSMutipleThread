@@ -112,6 +112,7 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
 	}
 
 **1.3）看先效果图**  
+![NSThread多线程加载效果](https://github.com/minggo620/iOSMutipleThread/blob/master/picture/mutiplethread1.gif?raw=true)  
 
 **1.4）NSThread的拓展认识**  
 ①获取当前线程    
@@ -251,7 +252,7 @@ Grand Central Dispatch (GCD)是Apple开发的一个多核编程的解决方法�
     }
 
 **2.3）看先效果图**    
-
+![NSOperation多线程加载效果](https://github.com/minggo620/iOSMutipleThread/blob/master/picture/mutiplethread2.gif?raw=true)
 #####3. GCD多线程
 GCD是Apple开发，据说高性能的多线程解决方案。既然这样，就细说一下这个解决方案。  
 进过Nsthread和NSOperation的讲述和上边的基础概念，可以开始组合用起来吧。**并发队列**、**串行队列**都用起来。  
@@ -356,5 +357,10 @@ GCD是Apple开发，据说高性能的多线程解决方案。既然这样，就
     });
 ①中等到两张图片加载完成后一起刷新，②就是典型的异步并行的例子，不需要理会各自图片加载的先后问题，完成加载图片刷新UI即可。从加载图片中来说，第①种不太合适使用，但是对于在上边场景选择的时候的创作工具来说有很大的好处，首先得异步进行，然后异步中有得按顺序执行几个任务，比如上传章节内容。因此，我们可以灵活考虑使用这两多线程任务执行方式，实现各种场景。    
 **3.4）编码实现**  
-以上一点内容99%代码一样，就不提供一个稍微整体的代码了。看看下边的效果图吧。  
+以上3.3的内容99%代码一样，就不提供一个稍微整体的代码了。看看下边的效果图吧。  
 **3.5）效果图如下**  
+![GCD多线程加载效果](https://github.com/minggo620/iOSMutipleThread/blob/master/picture/mutiplethread3.gif?raw=true)  
+###五.源码地址  
+##### ***[https://github.com/minggo620/iOSMutipleThread.git](https://github.com/minggo620/iOSMutipleThread.git)***  
+
+##### 如果小明这么跟银行柜台的MM讲多线程，会不会。。。“给我滚出去~~”。
